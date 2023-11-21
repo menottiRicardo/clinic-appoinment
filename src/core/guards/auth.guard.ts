@@ -36,7 +36,7 @@ export class JwtAuthGuard {
     const response = await firstValueFrom(
       this.authClient.send('validate_token', token),
     );
-    if (!response.status) {
+    if (!response) {
       throw new HttpException(response.error, HttpStatus.BAD_REQUEST);
     }
     request.user = response.data;

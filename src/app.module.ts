@@ -9,6 +9,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     ClientsModule.registerAsync([
       {
         name: 'AUTH_SERVICE',
@@ -16,7 +17,7 @@ import { MongooseModule } from '@nestjs/mongoose';
         useFactory: (configService: ConfigService) => ({
           transport: Transport.RMQ,
           options: {
-            url: configService.get('RABBITMQ_URL'),
+            url: 'amqp://localhost:5672',
             queue: configService.get('RABBITMQ_AUTH_QUEUE'),
           },
         }),
