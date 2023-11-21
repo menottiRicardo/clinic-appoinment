@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './core/guards/auth.guard';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AppointmentsModule } from './appointments/appointments.module';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { MongooseModule } from '@nestjs/mongoose';
         useFactory: (configService: ConfigService) => ({
           transport: Transport.RMQ,
           options: {
-            url: 'amqp://localhost:5672',
+            url: configService.get('RABBITMQ_URL'),
             queue: configService.get('RABBITMQ_AUTH_QUEUE'),
           },
         }),
@@ -32,6 +33,7 @@ import { MongooseModule } from '@nestjs/mongoose';
       }),
       inject: [ConfigService],
     }),
+    AppointmentsModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: JwtAuthGuard }],

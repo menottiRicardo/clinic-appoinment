@@ -1,7 +1,5 @@
 import {
   ExecutionContext,
-  HttpException,
-  HttpStatus,
   Inject,
   Injectable,
   UnauthorizedException,
@@ -37,7 +35,8 @@ export class JwtAuthGuard {
       this.authClient.send('validate_token', token),
     );
     if (!response) {
-      throw new HttpException(response.error, HttpStatus.BAD_REQUEST);
+      console.log('response', response);
+      throw new UnauthorizedException();
     }
     request.user = response.data;
     return true;
