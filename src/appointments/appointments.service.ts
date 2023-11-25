@@ -13,7 +13,7 @@ export class AppointmentsService {
     return this.appointments.create(appointment);
   }
 
-  findAll() {
+  findAll(userId: string) {
     return `This action returns all appointments`;
   }
 

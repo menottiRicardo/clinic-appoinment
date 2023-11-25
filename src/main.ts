@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
+import * as cookieParser from 'cookie-parser';
 
 function configureSwagger(app): void {
   const config = new DocumentBuilder()
@@ -16,10 +17,9 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
   app.setGlobalPrefix('appt');
-
+  app.use(cookieParser());
   configureSwagger(app);
 
-  await app.startAllMicroservices();
   await app.listen(configService.get('PORT'));
   console.log(
     '🚀 APPOINTMENT Service running on port: ' + configService.get('PORT'),
