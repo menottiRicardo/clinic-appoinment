@@ -41,7 +41,6 @@ export class JwtAuthGuard {
         console.log('bad');
         throw new UnauthorizedException();
       }
-      console.log('good', request.route);
       request.user = response.user;
       return true;
     } catch (error) {

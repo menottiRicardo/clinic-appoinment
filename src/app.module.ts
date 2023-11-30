@@ -8,6 +8,7 @@ import { JwtAuthGuard } from './core/guards/auth.guard';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppointmentsModule } from './appointments/appointments.module';
 import { EventsModule } from './events/events.module';
+import { AvailabilityModule } from './availability/availability.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { EventsModule } from './events/events.module';
     }),
     AppointmentsModule,
     EventsModule,
+    AvailabilityModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: JwtAuthGuard }],
