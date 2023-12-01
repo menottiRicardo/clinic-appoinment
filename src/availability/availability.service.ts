@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { UpdateAvailabilityDto } from './dto/update-availability.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Availability } from './availability.schema';
 import { Model } from 'mongoose';
@@ -16,12 +15,12 @@ export class AvailabilityService {
     return `This action returns all availability`;
   }
 
-  findOne(doctorId: string) {
-    return this.availability.findOne({ doctorId });
+  getAvailability(doctorId: string, clinicId: string) {
+    return this.availability.findOne({ clinicId, doctorId });
   }
 
-  update(id: number, updateAvailabilityDto: UpdateAvailabilityDto) {
-    return `This action updates a #${id} availability`;
+  update(doctorId: string, clinicId: string, availability: Availability) {
+    return this.availability.updateOne({ doctorId, clinicId }, availability);
   }
 
   remove(id: number) {

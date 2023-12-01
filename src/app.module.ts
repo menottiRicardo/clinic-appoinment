@@ -9,24 +9,26 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppointmentsModule } from './appointments/appointments.module';
 import { EventsModule } from './events/events.module';
 import { AvailabilityModule } from './availability/availability.module';
+import { AuthModule } from './core/services/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    ClientsModule.registerAsync([
-      {
-        name: 'AUTH_SERVICE',
-        imports: [ConfigModule],
-        useFactory: (configService: ConfigService) => ({
-          transport: Transport.RMQ,
-          options: {
-            url: configService.get('RABBITMQ_URL'),
-            queue: configService.get('RABBITMQ_AUTH_QUEUE'),
-          },
-        }),
-        inject: [ConfigService],
-      },
-    ]),
+    // ClientsModule.registerAsync([
+    //   {
+    //     name: 'AUTH_SERVICE',
+    //     imports: [ConfigModule],
+    //     useFactory: (configService: ConfigService) => ({
+    //       transport: Transport.RMQ,
+    //       options: {
+    //         url: configService.get('RABBITMQ_URL'),
+    //         queue: configService.get('RABBITMQ_AUTH_QUEUE'),
+    //       },
+    //     }),
+    //     inject: [ConfigService],
+    //   },
+    // ]),
+    AuthModule,
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({

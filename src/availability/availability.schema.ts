@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Schema as SchemaMon } from 'mongoose';
 
 export type AvailabilityDocument = HydratedDocument<Availability>;
 
@@ -13,8 +13,11 @@ export class Day {
 
 @Schema()
 export class Availability {
-  @Prop({ unique: true, required: true })
-  doctorId: string;
+  @Prop({ required: true })
+  doctorId: SchemaMon.Types.ObjectId;
+
+  @Prop({ required: true })
+  clinicId: SchemaMon.Types.ObjectId;
 
   @Prop()
   monday: Day;

@@ -1,16 +1,7 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Request,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Query } from '@nestjs/common';
 import { AvailabilityService } from './availability.service';
-import { UpdateAvailabilityDto } from './dto/update-availability.dto';
 import { Availability } from './availability.schema';
+import { UpdateAvailabilityDto } from './dto/update-availability.dto';
 
 @Controller('availability')
 export class AvailabilityController {
@@ -21,21 +12,20 @@ export class AvailabilityController {
     return this.availabilityService.create(availability);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.availabilityService.findOne(id);
-  }
-
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateAvailabilityDto: UpdateAvailabilityDto,
+  @Get()
+  findAvailability(
+    @Query('doctorId') doctorId: string,
+    @Query('clinicId') clinicId: string,
   ) {
-    return this.availabilityService.update(+id, updateAvailabilityDto);
+    return this.availabilityService.getAvailability(doctorId, clinicId);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.availabilityService.remove(+id);
+  @Patch()
+  update(@Body() updateAvailability: UpdateAvailabilityDto) {
+    return this.availabilityService.update(
+      updateAvailability.doctorId,
+      updateAvailability.clinicId,
+      updateAvailability.availability,
+    );
   }
 }

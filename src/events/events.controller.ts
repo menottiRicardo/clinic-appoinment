@@ -3,37 +3,37 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
-  Request,
+  Query,
 } from '@nestjs/common';
 import { EventsService } from './events.service';
-import { UpdateEventDto } from './dto/update-event.dto';
-import { Event } from './events.schema';
+import { CreateEventDto } from './dto/create-event.dto';
 
 @Controller('events')
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
   @Post()
-  create(@Request() req, @Body() createEventDto: Event) {
-    return this.eventsService.create(createEventDto, req.user);
+  create(@Body() createEventDto: CreateEventDto) {
+    return this.eventsService.create(
+      createEventDto.event,
+      createEventDto.doctorId,
+      createEventDto.clinicId,
+    );
   }
 
   @Get()
-  findAll(@Request() req) {
-    return this.eventsService.findAll(req.user._id);
+  findAll(
+    @Query('doctorId') doctorId: string,
+    @Query('clinicId') clinicId: string,
+  ) {
+    return this.eventsService.findAll(doctorId, clinicId);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.eventsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEventDto: UpdateEventDto) {
-    return this.eventsService.update(+id, updateEventDto);
   }
 
   @Delete(':id')

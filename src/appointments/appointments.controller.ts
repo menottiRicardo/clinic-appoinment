@@ -11,6 +11,7 @@ import {
 import { AppointmentsService } from './appointments.service';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { Appointment } from './appointments.schema';
+import { Public } from 'src/core/decorators/allow.decorator';
 
 @Controller('appointments')
 export class AppointmentsController {
@@ -24,6 +25,12 @@ export class AppointmentsController {
   @Get()
   findAll(@Req() req: any) {
     return this.appointmentsService.findAll(req.user._id);
+  }
+
+  @Public()
+  @Get('schedule/:doctorId')
+  findScheduleInfo(@Param('doctorId') doctorId: string) {
+    return this.appointmentsService.findScheduleInfo(doctorId);
   }
 
   @Get(':id')
