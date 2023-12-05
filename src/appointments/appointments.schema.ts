@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Schema as SchemaMon } from 'mongoose';
 
 export type AppointmentDocument = HydratedDocument<Appointment>;
 
@@ -9,16 +9,22 @@ export class Appointment {
   description: string;
 
   @Prop()
-  clinicId: string;
+  clinicId: SchemaMon.Types.ObjectId;
 
   @Prop()
-  patientId: string;
+  patientId: SchemaMon.Types.ObjectId;
 
   @Prop()
-  doctorId: string;
+  doctorId: SchemaMon.Types.ObjectId;
 
   @Prop()
-  date: string;
+  startDate: Date;
+
+  @Prop()
+  eventId: SchemaMon.Types.ObjectId;
+
+  @Prop()
+  endDate: Date;
 
   _id: string;
 }

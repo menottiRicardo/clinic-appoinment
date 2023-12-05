@@ -38,7 +38,6 @@ export class EventsController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    console.log('id', id);
     return this.eventsService.remove(id);
   }
 }

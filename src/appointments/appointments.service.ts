@@ -7,6 +7,12 @@ import { Event } from 'src/events/events.schema';
 import { Availability } from 'src/availability/availability.schema';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
+import * as dayjs from 'dayjs';
+import * as utc from 'dayjs/plugin/utc';
+import * as timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 @Injectable()
 export class AppointmentsService {
@@ -36,9 +42,9 @@ export class AppointmentsService {
     return `This action removes a #${id} appointment`;
   }
 
-  async findScheduleInfo(doctorId: string) {
+  async findScheduleInfo(doctorId: string, clinicId: string) {
     // find all the events for a given doctor
-    const events = await this.events.find({ doctorId });
+    const events = await this.events.find({ doctorId, clinicId });
 
     const days = [
       'sunday',
@@ -54,8 +60,18 @@ export class AppointmentsService {
       doctorId,
     });
 
-    const appointments = await this.appointments.find({ doctorId });
-    // calculate the availability for each day reducing the appointments already scheduled in time slots of 5 minutes
+    const rawAppointments = await this.appointments.find({
+      doctorId,
+      clinicId,
+    });
+    const appointments = rawAppointments.map((appt) => {
+      return {
+        ...appt,
+        eventId: appt.eventId,
+        startDate: dayjs(appt.startDate).tz('America/Panama').format(),
+        endDate: dayjs(appt.endDate).tz('America/Panama').format(),
+      };
+    });
     const daysOff = [];
 
     days.forEach((day) => {
@@ -64,14 +80,14 @@ export class AppointmentsService {
       }
     });
 
-    const doc = await firstValueFrom(
-      this.authClient.send('get_doc_by_id', doctorId),
+    const { doc, clinic } = await firstValueFrom(
+      this.authClient.send('get_doc_by_id', { doctorId, clinicId }),
     );
 
     const doctor = {
       name: doc.firstName + ' ' + doc.lastName,
       clinic: {
-        name: doc.clinic.name,
+        name: clinic.name,
       },
     };
     return { events, availability, appointments, daysOff, doctor };

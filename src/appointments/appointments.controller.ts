@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Req,
+  Query,
 } from '@nestjs/common';
 import { AppointmentsService } from './appointments.service';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
@@ -28,9 +29,12 @@ export class AppointmentsController {
   }
 
   @Public()
-  @Get('schedule/:doctorId')
-  findScheduleInfo(@Param('doctorId') doctorId: string) {
-    return this.appointmentsService.findScheduleInfo(doctorId);
+  @Get('schedule')
+  findScheduleInfo(
+    @Query('doctorId') doctorId: string,
+    @Query('clinicId') clinicId: string,
+  ) {
+    return this.appointmentsService.findScheduleInfo(doctorId, clinicId);
   }
 
   @Get(':id')
