@@ -23,6 +23,7 @@ export class JwtAuthGuard {
         IS_PUBLIC_KEY,
         [context.getHandler(), context.getClass()],
       );
+      console.log('here')
       if (isPublic || isRpc) {
         return true;
       }

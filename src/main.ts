@@ -16,9 +16,10 @@ function configureSwagger(app): void {
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
-  app.setGlobalPrefix('appt');
   app.use(cookieParser());
   configureSwagger(app);
+
+  console.log('hre>>')
 
   await app.listen(configService.get('PORT'));
   console.log(
