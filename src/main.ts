@@ -6,7 +6,7 @@ import * as cookieParser from 'cookie-parser';
 
 function configureSwagger(app): void {
   const config = new DocumentBuilder()
-    .setTitle('appointmet-service')
+    .setTitle('appointment-service')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
@@ -19,7 +19,6 @@ async function bootstrap() {
   app.use(cookieParser());
   configureSwagger(app);
 
-  console.log('hre>>')
 
   await app.listen(configService.get('PORT'));
   console.log(
