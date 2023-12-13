@@ -23,7 +23,7 @@ export class JwtAuthGuard {
         IS_PUBLIC_KEY,
         [context.getHandler(), context.getClass()],
       );
-      console.log('here')
+      console.log('here');
       if (isPublic || isRpc) {
         return true;
       }
@@ -35,17 +35,18 @@ export class JwtAuthGuard {
         throw new UnauthorizedException();
       }
       token = token.replace('Bearer ', '');
+      console.log('token', token);
       const response = await firstValueFrom(
         this.authClient.send('validate_token', token),
       );
       if (!response) {
-        console.log('bad');
+        console.log('bad', response);
         throw new UnauthorizedException();
       }
       request.user = response.user;
       return true;
     } catch (error) {
-      console.log('error', error);
+      console.log('error authenticating', error);
       throw new UnauthorizedException();
     }
   }
