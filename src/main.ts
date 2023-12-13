@@ -19,7 +19,7 @@ async function bootstrap() {
   app.use(cookieParser());
   configureSwagger(app);
 
-
+  console.log(configService.get('RABBITMQ_URL'));
   await app.listen(configService.get('PORT'));
   console.log(
     '🚀 APPOINTMENT Service running on port: ' + configService.get('PORT'),
