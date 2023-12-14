@@ -9,7 +9,6 @@ export class AppController {
   @Public()
   @Get('health')
   status(): string {
-    console.log('hre>>2 from app.controller.ts');
     return this.appService.getHello();
   }
 }
